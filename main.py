@@ -3,6 +3,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import argparse
 import os
+from image import Image
 import dlib
 
 def main():
@@ -13,14 +14,15 @@ def main():
 
     args = parser.parse_args()
 
+    imageList = []
+
     for file in os.listdir(args.images):
         if file.endswith(".jpg"):
-            print(file)
-            test_image = cv2.imread(file)
-            image_grey = cv2.cvtColor(test_image, cv2.COLOR_BGR2GRAY)
+            temp_Image = Image(args.images + "/" + file)
+            imageList.append(temp_Image)
 
-            plt.imshow(image_grey, cmap='grey')
-
+    for image in imageList:
+        image.showImage()
 
 if __name__ == "__main__":
     main()
