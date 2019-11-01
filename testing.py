@@ -28,7 +28,7 @@ def main():
     #     face.show()
 
     #TODO: Download predictor and set path (https://www.pyimagesearch.com/2017/04/10/detect-eyes-nose-lips-jaw-dlib-opencv-python/)
-    path_to_shape_predictor = "shape_predictor_68_face_landmarks.dat"
+    path_to_shape_predictor = "shape_predictor_5_face_landmarks.dat"
 
     # init dlib's face detector (HOG-based) and then create the facial landmark predictor
     detector = dlib.get_frontal_face_detector()
@@ -49,31 +49,22 @@ def main():
         shape = predictor(gray, rect)
         shape = face_utils.shape_to_np(shape)
 
+        #clone original image so we can draw on it
+        clone = img.copy()
+
         #loop over the face parts individually
-        for (name, (i, j)) in face_utils.FACIAL_LANDMARKS_IDXS.items():
-            #clone original image so we can draw on it then display name of face part
-            clone = img.copy()
-            cv2.putText(clone, name, (10,30), cv2.FONT_HERSHEY_SIMPLEX, 0.7, (0, 0, 255), 2)
-
-            #loop over subset of facial landmarks, drawing the specific face part
-            for (x, y) in shape[i:j]:
-                cv2.circle(clone, (x, y), 1, (0, 0, 255), -1)
+        for (i, (x, y)) in enumerate(shape):
             
-            #extract the ROI of the face region as a separate image
-            (x, y, w, h) = cv2.boundingRect(np.array([shape[i:j]]))
-            roi = img[y:y + h, x:x + w]
-            roi = imutils.resize(roi, width=250, inter=cv2.INTER_CUBIC)
+            #cv2.putText(clone, i, (10,30), cv2.FONT_HERSHEY_SIMPLEX, 0.7, (0, 0, 255), 2)
+            
+            #Draw dots for each
+            cv2.circle(clone, (x, y), 1, (0, 0, 255), -1)
 
 
-            #show the particular face part
-            cv2.imshow("ROI", roi)
-            cv2.imshow("IMAGE", clone)
-            cv2.waitKey(0)
-
-        #visualize all facial landmarks with a transparent overlay
-        output = face_utils.visualize_facial_landmarks(img, shape)
-        cv2.imshow("Image", clone)
+        #show the face
+        cv2.imshow("IMAGE", clone)
         cv2.waitKey(0)
+
 
 if __name__ == "__main__":
     main()
