@@ -33,7 +33,15 @@ class Face:
                 landmarks = predictor(gray, face)
                 landmarks = face_utils.shape_to_np(landmarks)
 
-                self.right_eye = (landmarks[0],landmarks[1])
-                self.left_eye = (landmarks[2], landmarks[3])
+                #Find midpoint of eye landmarks
+                self.right_eye = [(landmarks[0][0] + landmarks[1][0]//2), (landmarks[0][1]+landmarks[1][1])//2]
+                self.left_eye = [(landmarks[2][0] + landmarks[3][0])//2, (landmarks[2][1]+landmarks[3][1])//2]
+                self.eye_midpoint = [(self.right_eye[0] + self.left_eye[0])//2, (self.right_eye[1] + self.left_eye[1]) //2]
+
+                #Compute angle between eyes
+                dY = self.right_eye[1] - self.left_eye[1]
+                dX = self.right_eye[0] - self.left_eye[0]
+                self.eye_angle = np.degrees(np.arctan2(dY, dX)) - 180
                 self.nose = landmarks[4]
+    
 

@@ -26,9 +26,10 @@ def main():
 
     for face in faceList:
         face.detectFeatures()
-        face.show()
+        #face.show()
         print(face.left_eye)
         print(face.right_eye)
+        print(face.eye_midpoint)
         print(face.nose)
 
     
