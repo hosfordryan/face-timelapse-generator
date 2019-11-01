@@ -17,17 +17,24 @@ def main():
 
     args = parser.parse_args()
 
-    # faceList = []
+    faceList = []
 
-    # for file in os.listdir(args.images):
-    #     if file.endswith(".jpg"):
-    #         temp_Image = Image(args.images + "/" + file)
-    #         faceList.append(Face(temp_Image))
+    for file in os.listdir(args.images):
+        if file.endswith(".jpg"):
+            temp_Image = Image(args.images + "/" + file)
+            faceList.append(Face(temp_Image))
 
-    # for face in faceList:
-    #     face.show()
+    for face in faceList:
+        face.detectFeatures()
+        face.show()
+        print(face.left_eye)
+        print(face.right_eye)
+        print(face.nose)
 
-    #TODO: Download predictor and set path (https://www.pyimagesearch.com/2017/04/10/detect-eyes-nose-lips-jaw-dlib-opencv-python/)
+    
+
+
+def landmarkTesting():
     path_to_shape_predictor = "shape_predictor_5_face_landmarks.dat"
 
     # init dlib's face detector (HOG-based) and then create the facial landmark predictor
@@ -37,7 +44,7 @@ def main():
     # load input image
     #img = Image("~/Pictures/PicOfTheDay-Testing/IMG_20190911_210847.jpg")
     img = Image("testImage.jpg")
-    img = imutils.resize(img.get(), width=500)
+    img = imutils.resize(img.image, width=500)
     gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
 
     #detect faces in grayscale image
@@ -64,7 +71,6 @@ def main():
         #show the face
         cv2.imshow("IMAGE", clone)
         cv2.waitKey(0)
-
 
 if __name__ == "__main__":
     main()

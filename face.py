@@ -14,24 +14,26 @@ class Face:
 
     def detectFeatures(self):
         detector = dlib.get_frontal_face_detector()
-        predictor = dlib.shape_predictor("shape_predictor_68_face_landmarks.dat")
+        predictor = dlib.shape_predictor("shape_predictor_5_face_landmarks.dat")
 
-        self.features = []
 
         img = self.image
         #convert img to grayscale
-        gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+        gray = cv2.cvtColor(img.image, cv2.COLOR_BGR2GRAY)
 
         #detect faces in the image
         faces = detector(gray, 1)
 
-        #loop over the face detections
-        for (i, face) in enumerate(faces):
-            #find the facial landmarks and convert to Numpy array
-            landmarks = predictor(gray, face)
-            landmarks = face_utils.shape_to_np(face)
+        #If we detected a face
+        if len(faces) > 0:
 
-            #add the parts to the list
-            for (name, (i, j)) in face_utils.FACIAL_LANDMARKS_IDXS.items():
-                print("Not done")
+            #loop over the face detections
+            for (i, face) in enumerate(faces):
+                #find the facial landmarks and convert to Numpy array
+                landmarks = predictor(gray, face)
+                landmarks = face_utils.shape_to_np(landmarks)
+
+                self.right_eye = (landmarks[0],landmarks[1])
+                self.left_eye = (landmarks[2], landmarks[3])
+                self.nose = landmarks[4]
 
